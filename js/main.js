@@ -106,6 +106,16 @@
     card.setAttribute('aria-expanded', 'false');
 
     card.addEventListener('click', (event) => {
+      const cardLink = event.target.closest('.card-link');
+
+      if (cardLink) {
+        if (!card.classList.contains('is-drawn')) {
+          event.preventDefault();
+        }
+        event.stopPropagation();
+        return;
+      }
+
       event.stopPropagation();
       const isOpen = card.classList.contains('is-drawn');
       const current = cards.find((item) => item.classList.contains('is-drawn'));

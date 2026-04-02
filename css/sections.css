@@ -782,6 +782,11 @@
   transition: opacity var(--ease-quick), transform var(--ease-quick);
 }
 
+.deck-card:not(.is-drawn) .card-body,
+.deck-card:not(.is-drawn) .card-body * {
+  pointer-events: none;
+}
+
 .card-body .member-avatar {
   margin-bottom: 0.35rem;
 }
