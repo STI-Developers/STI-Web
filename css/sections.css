@@ -100,6 +100,18 @@
   text-align: center;
 }
 
+.identity-logo {
+  width: clamp(5rem, 10vw, 7rem);
+  aspect-ratio: 1;
+  object-fit: contain;
+  filter: grayscale(1) contrast(1.15) brightness(1.1);
+  border-radius: 1.2rem;
+  border: var(--line-thin) solid var(--c-surface-2);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.7rem;
+  box-shadow: 0.4rem 0.4rem 0 var(--c-surface-2);
+}
+
 .identity-title {
   position: relative;
   font-family: var(--font-mono);
@@ -570,15 +582,40 @@
 .deck-cover {
   display: grid;
   place-content: center;
+  justify-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.cover-logo {
+  width: min(9rem, 46%);
+  aspect-ratio: 1;
+  object-fit: contain;
+  filter: grayscale(1) contrast(1.15);
+}
+
+.cover-brand {
+  display: grid;
+  gap: 0.7rem;
+  justify-items: center;
 }
 
 .cover-sti {
   font-family: var(--font-mono);
-  font-size: clamp(5rem, 16vw, 11rem);
+  font-size: clamp(4.4rem, 14vw, 8.8rem);
   line-height: 0.84;
   letter-spacing: 0.08em;
   -webkit-text-stroke: 2px currentColor;
   text-stroke: 2px currentColor;
+}
+
+.cover-subtitle {
+  max-width: 16rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1.6;
 }
 
 .card-corner {
