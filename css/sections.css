@@ -540,7 +540,7 @@
   width: min(980px, 96vw);
   height: min(58vh, 500px);
   margin-inline: auto;
-  margin-top: clamp(1.5rem, 4vh, 3rem);
+  margin-top: clamp(2.4rem, 6vh, 4.4rem);
   --draw-offset-x: min(42vw, 500px);
   --draw-offset-y: -1.5vh;
   transition: transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
