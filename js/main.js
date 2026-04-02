@@ -1,7 +1,3 @@
-/**
- * Minimal JS for Page 1 cursor spotlight.
- * Only updates CSS custom properties used by the radial gradient layer.
- */
 (function () {
   const scrollRoot = document.querySelector('.site-scroll');
   const panels = Array.from(document.querySelectorAll('.panel'));
@@ -46,6 +42,7 @@
     if (!cards.length) return;
 
     let drawTimer = null;
+    let drawHistory = [];
     let stackOrder = cards
       .slice()
       .sort(
@@ -83,9 +80,80 @@
 
     const returnCardToDeck = (card) => {
       if (!card) return;
+
       card.classList.remove('is-drawn');
       card.setAttribute('aria-expanded', 'false');
       sendToBottom(card);
+    };
+
+    const drawCard = (card, options = {}) => {
+      if (!card) return;
+      const { recordHistory = true } = options;
+
+      card.classList.add('is-drawn');
+      card.setAttribute('aria-expanded', 'true');
+
+      if (recordHistory && !card.classList.contains('deck-cover')) {
+        if (drawHistory[drawHistory.length - 1] !== card) {
+          drawHistory.push(card);
+        }
+      }
+
+      syncDeckState();
+      syncFrontCard();
+    };
+
+    const animateCardReturn = (card) => {
+      if (!card) return;
+
+      card.classList.remove('is-returning');
+      void card.offsetWidth;
+      card.classList.add('is-returning');
+
+      window.setTimeout(() => {
+        card.classList.remove('is-returning');
+      }, 420);
+    };
+
+    const restorePreviousCard = () => {
+      if (drawTimer) {
+        clearTimeout(drawTimer);
+        drawTimer = null;
+      }
+
+      const current = cards.find((card) => card.classList.contains('is-drawn'));
+      const coverCard = cards.find((card) => card.classList.contains('deck-cover'));
+
+      if (current && current.classList.contains('deck-cover')) {
+        drawHistory = [];
+        closeAll();
+        return;
+      }
+
+      if (current && !current.classList.contains('deck-cover')) {
+        while (drawHistory.length && drawHistory[drawHistory.length - 1] !== current) {
+          drawHistory.pop();
+        }
+
+        if (drawHistory[drawHistory.length - 1] === current) {
+          drawHistory.pop();
+        }
+      }
+
+      const previous = drawHistory[drawHistory.length - 1] || coverCard;
+
+      if (!previous) return;
+
+      if (current) {
+        returnCardToDeck(current);
+      }
+
+      if (previous.classList.contains('deck-cover')) {
+        drawHistory = [];
+      }
+
+      drawCard(previous, { recordHistory: false });
+      animateCardReturn(previous);
     };
 
     const closeAll = () => {
@@ -132,10 +200,7 @@
 
         if (!current) {
           if (!isOpen) {
-            card.classList.add('is-drawn');
-            card.setAttribute('aria-expanded', 'true');
-            syncDeckState();
-            syncFrontCard();
+            drawCard(card);
           }
           return;
         }
@@ -150,12 +215,15 @@
         syncFrontCard();
 
         drawTimer = setTimeout(() => {
-          card.classList.add('is-drawn');
-          card.setAttribute('aria-expanded', 'true');
-          syncDeckState();
-          syncFrontCard();
+          drawCard(card);
           drawTimer = null;
         }, 260);
+      });
+
+      card.addEventListener('contextmenu', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        restorePreviousCard();
       });
 
       card.addEventListener('keydown', (event) => {
@@ -163,6 +231,11 @@
         event.preventDefault();
         card.click();
       });
+    });
+
+    deck.addEventListener('contextmenu', (event) => {
+      event.preventDefault();
+      restorePreviousCard();
     });
 
     document.addEventListener('click', closeAll);

@@ -569,6 +569,50 @@
   box-shadow: 0.28rem 0.28rem 0 var(--c-accent);
 }
 
+.page-mouse-hint {
+  position: fixed;
+  left: 50%;
+  bottom: 1rem;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  transform: translateX(-50%);
+  padding: 0.45rem 0.72rem;
+  border: 1px solid rgba(50, 215, 75, 0.35);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 16px rgba(50, 215, 75, 0.08);
+  pointer-events: none;
+}
+
+.mouse-icon {
+  width: 1rem;
+  height: 1.6rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  display: grid;
+  justify-items: center;
+  padding-top: 0.22rem;
+}
+
+.mouse-wheel {
+  width: 0.18rem;
+  height: 0.38rem;
+  border-radius: 999px;
+  background: var(--c-accent);
+  animation: mouseWheelDrift 1.4s ease-in-out infinite;
+}
+
+.mouse-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+}
+
 /* Poker deck layout: centered stacked absolute cards */
 .member-deck {
   position: relative;
@@ -871,6 +915,10 @@
   box-shadow: 0.9rem 1rem 0 var(--c-accent);
 }
 
+.deck-card.is-drawn.is-returning {
+  animation: cardReturnPop 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 .deck-card.is-drawn .card-corner {
   opacity: 0;
   transform: translate(-0.4rem, -0.4rem) rotate(-6deg) scale(0.92);
@@ -1076,6 +1124,36 @@
   }
   100% {
     background-position: 0 0;
+  }
+}
+
+@keyframes mouseWheelDrift {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translateY(0.32rem);
+    opacity: 1;
+  }
+}
+
+@keyframes cardReturnPop {
+  0% {
+    transform: translate(calc(-50% + var(--draw-offset-x) - 2.4rem), calc(-50% + var(--draw-offset-y) + 1rem))
+      rotate(-8deg) scale(0.94);
+    box-shadow: 0.3rem 0.4rem 0 rgba(50, 215, 75, 0.5);
+  }
+  58% {
+    transform: translate(calc(-50% + var(--draw-offset-x) + 0.4rem), calc(-50% + var(--draw-offset-y) - 0.2rem))
+      rotate(2deg) scale(1.27);
+    box-shadow: 1.1rem 1.2rem 0 var(--c-accent);
+  }
+  100% {
+    transform: translate(calc(-50% + var(--draw-offset-x)), calc(-50% + var(--draw-offset-y)))
+      rotate(0deg) scale(1.22);
+    box-shadow: 0.9rem 1rem 0 var(--c-accent);
   }
 }
 
