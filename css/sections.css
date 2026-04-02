@@ -391,38 +391,64 @@
 .panel-members::before {
   content: '';
   position: absolute;
-  inset: -10%;
+  inset: 0;
   z-index: 0;
-  background:
-    repeating-linear-gradient(
-      -35deg,
-      transparent 0 24px,
-      var(--c-black) 24px 26px
-    ),
-    repeating-linear-gradient(
-      35deg,
-      transparent 0 28px,
-      var(--c-black) 28px 30px
-    );
-  animation: stripeFlow 18s linear infinite;
+  background: radial-gradient(circle at 50% 50%, rgba(50, 215, 75, 0.05), transparent 58%);
   pointer-events: none;
 }
 
 .panel-members::after {
   content: '';
   position: absolute;
-  left: -15%;
-  top: 18%;
-  width: 80%;
-  height: 1px;
+  inset: 0;
   z-index: 0;
-  background: var(--c-surface-2);
-  box-shadow: 0 22vh 0 var(--c-surface-2), 0 44vh 0 var(--c-surface-2);
-  animation: lineSlide 10s ease-in-out infinite alternate;
+  background: linear-gradient(180deg, rgba(50, 215, 75, 0.02), transparent 24%, transparent 76%, rgba(50, 215, 75, 0.02));
   pointer-events: none;
 }
 
-.panel-members > * {
+.meteor-field {
+  position: absolute;
+  inset: -18vh -22vw;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: auto;
+  opacity: 0.3;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.meteor-track {
+  position: absolute;
+  left: var(--left);
+  top: var(--top);
+  width: 170vw;
+  height: calc(0.1rem + 2px);
+  transform: rotate(var(--angle));
+  transform-origin: center;
+  background: linear-gradient(
+    90deg,
+    rgba(50, 215, 75, 0) 0%,
+    rgba(50, 215, 75, 0) 24%,
+    rgba(50, 215, 75, 0.08) 34%,
+    rgba(50, 215, 75, 0.2) 44%,
+    rgba(50, 215, 75, 0.56) 54%,
+    rgba(50, 215, 75, 0.94) 60%,
+    rgba(233, 255, 238, 1) 63%,
+    rgba(50, 215, 75, 0.3) 74%,
+    rgba(50, 215, 75, 0.08) 86%,
+    rgba(50, 215, 75, 0) 100%
+  );
+  background-size: 200% 200%;
+  background-position: 200% 0;
+  box-shadow: 0 0 7px rgba(50, 215, 75, 0.24), 0 0 16px rgba(50, 215, 75, 0.12);
+  animation: moveLine var(--duration) linear infinite;
+  animation-delay: var(--delay);
+}
+
+.panel-members > *:not(.meteor-field) {
   position: relative;
   z-index: 2;
 }
@@ -1033,21 +1059,12 @@
   }
 }
 
-@keyframes stripeFlow {
+@keyframes moveLine {
   0% {
-    background-position: 0 0, 0 0;
+    background-position: 200% 0;
   }
   100% {
-    background-position: 220px 0, -220px 0;
-  }
-}
-
-@keyframes lineSlide {
-  0% {
-    transform: translateX(-6%);
-  }
-  100% {
-    transform: translateX(18%);
+    background-position: 0 0;
   }
 }
 
