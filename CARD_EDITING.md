@@ -34,11 +34,12 @@ Temporary avatars live in `avatars/`.
 Use a relative path such as:
 - `avatars/ruby.png`
 - `avatars/blake.png`
+- `avatars/E.png`
 
 When replacing an avatar, keep the `alt` text matched to the member name.
 
 ## Example
-The E card currently shows `Erina Yip`.
+The E card currently shows `Erina Yip` and uses `avatars/E.png`.
 To change it, edit the block that contains:
 - `<strong>E</strong>`
 - `<span class="mini-name">Erina Yip</span>`
