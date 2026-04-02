@@ -76,6 +76,13 @@
     if (front) front.classList.add('is-front');
   };
 
+  const returnCardToDeck = (card) => {
+    if (!card) return;
+    card.classList.remove('is-drawn');
+    card.setAttribute('aria-expanded', 'false');
+    sendToBottom(card);
+  };
+
   const closeAll = () => {
     if (drawTimer) {
       clearTimeout(drawTimer);
@@ -83,11 +90,13 @@
     }
     const current = cards.find((card) => card.classList.contains('is-drawn'));
     if (current) {
-      sendToBottom(current);
+      returnCardToDeck(current);
     }
     cards.forEach((card) => {
-      card.classList.remove('is-drawn');
-      card.setAttribute('aria-expanded', 'false');
+      if (card !== current) {
+        card.classList.remove('is-drawn');
+        card.setAttribute('aria-expanded', 'false');
+      }
     });
     syncDeckState();
     syncFrontCard();
@@ -121,9 +130,7 @@
         return;
       }
 
-      sendToBottom(current);
-      current.classList.remove('is-drawn');
-      current.setAttribute('aria-expanded', 'false');
+      returnCardToDeck(current);
       syncDeckState();
       syncFrontCard();
 
