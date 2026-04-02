@@ -22,14 +22,23 @@
   if (!cards.length || !deck) return;
 
   let drawTimer = null;
-  const initialMinZ = Math.min(
-    ...cards.map((card) => Number(card.style.getPropertyValue('--z')) || 0)
-  );
-  let nextBottomZ = initialMinZ - 1;
+  let stackOrder = cards
+    .slice()
+    .sort(
+      (a, b) =>
+        (Number(a.style.getPropertyValue('--z')) || 0) -
+        (Number(b.style.getPropertyValue('--z')) || 0)
+    );
+
+  const applyStackOrder = () => {
+    stackOrder.forEach((card, index) => {
+      card.style.setProperty('--z', String((index + 1) * 10));
+    });
+  };
 
   const sendToBottom = (card) => {
-    card.style.setProperty('--z', String(nextBottomZ));
-    nextBottomZ -= 1;
+    stackOrder = [card, ...stackOrder.filter((item) => item !== card)];
+    applyStackOrder();
   };
 
   const syncDeckState = () => {
@@ -39,14 +48,12 @@
 
   const syncFrontCard = () => {
     cards.forEach((card) => card.classList.remove('is-front'));
-    const undrawn = cards
-      .filter((card) => !card.classList.contains('is-drawn'))
-      .sort(
-        (a, b) =>
-          (Number(b.style.getPropertyValue('--z')) || 0) -
-          (Number(a.style.getPropertyValue('--z')) || 0)
-      );
-    const front = undrawn.find((card) => !card.classList.contains('deck-cover')) || undrawn[0];
+    const undrawn = stackOrder.filter((card) => !card.classList.contains('is-drawn'));
+    const front =
+      undrawn
+        .slice()
+        .reverse()
+        .find((card) => !card.classList.contains('deck-cover')) || undrawn[undrawn.length - 1];
     if (front) front.classList.add('is-front');
   };
 
@@ -118,6 +125,7 @@
   });
 
   document.addEventListener('click', closeAll);
+  applyStackOrder();
   syncDeckState();
   syncFrontCard();
 })();
