@@ -3,6 +3,25 @@
  * Only updates CSS custom properties used by the radial gradient layer.
  */
 (function () {
+  const memberDeck = document.querySelector('.member-deck');
+  const memberCards = Array.isArray(window.memberCards) ? window.memberCards : [];
+
+  const renderMemberCard = (member) => `
+    <article class="deck-card" role="listitem" tabindex="0" style="--tx:${member.tx}; --ty:${member.ty}; --rot:${member.rot}; --z:${member.z};">
+      <span class="card-backdrop" aria-hidden="true">${member.letter}</span>
+      <span class="card-letter">${member.letter}</span>
+      <div class="card-corner"><span class="mini-avatar">${member.initials}</span><span class="mini-name">${member.name}</span></div>
+      <div class="card-preview">
+        <div class="card-preview-top"><img class="member-avatar" src="${member.avatar}" alt="${member.name} avatar" /><div class="card-preview-mark"><span>STI</span><strong>${member.letter}</strong></div></div>
+        <div class="card-preview-meta"><h3>${member.name}</h3><p>${member.previewRole}</p></div>
+      </div>
+      <div class="card-body"><img class="member-avatar" src="${member.avatar}" alt="${member.name} avatar" /><h3>${member.name}</h3><p class="card-slogan">${member.slogan}</p><p class="card-role">${member.detailRole}</p><p>${member.description}</p><a class="card-link" href="${member.website}" target="_blank" rel="noreferrer">${member.websiteLabel}</a></div>
+    </article>`;
+
+  if (memberDeck && memberCards.length) {
+    memberDeck.insertAdjacentHTML('beforeend', memberCards.map(renderMemberCard).join(''));
+  }
+
   const identity = document.querySelector('.panel-identity');
   if (identity) {
     const updateSpotlight = (event) => {

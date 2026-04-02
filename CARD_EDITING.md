@@ -1,33 +1,39 @@
 # Card Editing Guide
 
-This project stores all member card content directly in `index.html` inside the `.member-deck` section.
+This project stores member card data in `js/member-data.js` and renders the cards into the `.member-deck` section in `index.html`.
 
 ## Where to edit
-- Open `index.html`.
-- Find the member deck block near the `The Members` section.
-- Each member card is one `<article class="deck-card">...</article>`.
-- The first card with `deck-cover` is the STI cover card, not a member profile.
+- Open `js/member-data.js`.
+- Each member is one object inside `window.memberCards`.
+- The deck container stays in `index.html`, but the member cards are rendered by `js/main.js`.
+- The first card with `deck-cover` in `index.html` is still the STI cover card, not a member profile.
 
-## Card structure
-Each member card contains these parts:
-- `card-backdrop` — large blurred background letter
-- `card-letter` — small top-right card letter
-- `card-corner` — small corner badge with initials and name
-- `card-preview` — content shown before the card is drawn
-- `card-body` — content shown after the card is drawn
+## Data fields
+Each member object contains these fields:
+- `letter` — card letter and background mark
+- `initials` — corner badge initials
+- `name` — member name
+- `avatar` — avatar image path
+- `previewRole` — role shown before drawing
+- `slogan` — highlighted detail text
+- `detailRole` — role shown after drawing
+- `description` — longer member description
+- `website` and `websiteLabel` — link target and visible text
+- `tx`, `ty`, `rot`, `z` — stack position and rotation
 
 ## What to change
-For one member card, update these fields together:
-- initials in `.mini-avatar`
-- short name in `.mini-name`
-- avatar path in both `.member-avatar` images
-- preview name in `.card-preview-meta h3`
-- preview role in `.card-preview-meta p`
-- detail name in `.card-body h3`
-- slogan in `.card-slogan`
-- detail role in `.card-role`
-- description in the plain paragraph after `.card-role`
-- website in `.card-link`
+For one member card, update these fields together in the same object:
+- `initials`
+- `name`
+- `avatar`
+- `previewRole`
+- `slogan`
+- `detailRole`
+- `description`
+- `website`
+- `websiteLabel`
+
+Only change `tx`, `ty`, `rot`, or `z` when you want to adjust the visual stack layout.
 
 ## Avatar images
 Temporary avatars live in `avatars/`.
@@ -40,14 +46,11 @@ When replacing an avatar, keep the `alt` text matched to the member name.
 
 ## Example
 The E card currently shows `Erina Yip` and uses `avatars/E.png`.
-To change it, edit the block that contains:
-- `<strong>E</strong>`
-- `<span class="mini-name">Erina Yip</span>`
+To change it, edit the object with:
+- `letter: 'E'`
+- `name: 'Erina Yip'`
 
 ## Layout notes
-Do not remove these wrappers unless you also update CSS:
-- `.card-preview`
-- `.card-body`
-- `.card-corner`
-
-Most visual styling lives in `css/sections.css`.
+- `js/main.js` converts each data object into the card markup.
+- Most visual styling still lives in `css/sections.css`.
+- If you change the generated HTML structure in `js/main.js`, update the related CSS selectors too.
