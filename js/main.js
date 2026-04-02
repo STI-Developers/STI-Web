@@ -5,6 +5,9 @@
 (function () {
   const identity = document.querySelector('.panel-identity');
   if (identity) {
+    const title = identity.querySelector('.identity-title');
+    let releaseTimer = null;
+
     const updateSpotlight = (event) => {
       const rect = identity.getBoundingClientRect();
       const x = ((event.clientX - rect.left) / rect.width) * 100;
@@ -14,7 +17,33 @@
       identity.style.setProperty('--my', `${y}%`);
     };
 
+    const beginRelease = () => {
+      if (!title) return;
+      title.classList.remove('is-pressed');
+      title.classList.add('is-releasing');
+      if (releaseTimer) clearTimeout(releaseTimer);
+      releaseTimer = setTimeout(() => {
+        title.classList.remove('is-releasing');
+        releaseTimer = null;
+      }, 520);
+    };
+
     window.addEventListener('pointermove', updateSpotlight, { passive: true });
+
+    if (title) {
+      identity.addEventListener('pointerdown', () => {
+        if (releaseTimer) {
+          clearTimeout(releaseTimer);
+          releaseTimer = null;
+        }
+        title.classList.remove('is-releasing');
+        title.classList.add('is-pressed');
+      });
+
+      identity.addEventListener('pointerup', beginRelease);
+      identity.addEventListener('pointerleave', beginRelease);
+      identity.addEventListener('pointercancel', beginRelease);
+    }
   }
 
   const cards = Array.from(document.querySelectorAll('.deck-card'));
