@@ -2,6 +2,7 @@
   const scrollRoot = document.querySelector('.site-scroll');
   const panels = Array.from(document.querySelectorAll('.panel'));
   const membersPanel = document.querySelector('.panel-members');
+  const slider = document.querySelector('.slider');
   const memberDeck = document.querySelector('.member-deck');
   const memberCards = Array.isArray(window.memberCards) ? window.memberCards : [];
   let deckInitialized = false;
@@ -18,6 +19,22 @@
       <div class="card-body"><img class="member-avatar" src="${member.avatar}" alt="${member.name} avatar" loading="lazy" decoding="async" /><h3>${member.name}</h3><p class="card-slogan">${member.slogan}</p><p class="card-role">${member.detailRole}</p><p>${member.description}</p><a class="card-link" href="${member.website}" target="_blank" rel="noreferrer">${member.websiteLabel}</a></div>
     </article>`;
 
+  const renderOrbitCard = (member, index) => {
+    return `
+      <div class="item" style="--position:${index + 1}">
+        <div class="counter-static">
+          <div class="counter-anim">
+            <article class="item-card" data-letter="${member.letter}">
+              <img src="${member.avatar}" alt="${member.name} avatar" loading="lazy" decoding="async" />
+              <strong>${member.name}</strong>
+              <span>${member.previewRole}</span>
+              <p>${member.slogan}</p>
+            </article>
+          </div>
+        </div>
+      </div>`;
+  };
+
   const setActivePanels = () => {
     if (!scrollRoot || !panels.length) return;
 
@@ -30,6 +47,11 @@
       panel.classList.toggle('is-active', isActive);
     });
   };
+
+  if (slider && memberCards.length) {
+    slider.style.setProperty('--quantity', String(memberCards.length));
+    slider.insertAdjacentHTML('beforeend', memberCards.map(renderOrbitCard).join(''));
+  }
 
   const initializeDeck = () => {
     if (deckInitialized || !memberDeck || !memberCards.length) return;
