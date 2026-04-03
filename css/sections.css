@@ -998,25 +998,54 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
+  transform-style: preserve-3d;
 }
 
 .ground-ring {
   position: absolute;
   left: 50%;
-  top: 58%;
+  top: 85%;
   border-radius: 50%;
-  transform: translate(-50%, -50%) rotateX(90deg);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  transform-style: preserve-3d;
+  animation: ringFloat 4s ease-in-out infinite;
+  overflow: visible;
 }
 
-.ground-ring-1 { width: min(84vw, 820px); height: min(84vw, 820px); }
-.ground-ring-2 { width: min(62vw, 580px); height: min(62vw, 580px); border-style: dashed; border-color: rgba(50, 215, 75, 0.22); }
-.ground-ring-3 { width: min(42vw, 380px); height: min(42vw, 380px); }
+.ground-ring::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: var(--c-white);
+  border-right-color: var(--c-white);
+  animation: ringShimmer 6s linear infinite;
+}
+
+.ground-ring:nth-child(2) { animation-delay: -1.3s, -2s; }
+.ground-ring:nth-child(3) { animation-delay: -2.6s, -4s; }
+
+.ground-ring-1 {
+  width: min(84vw, 820px);
+  height: min(84vw, 820px);
+  transform: translate(-50%, -50%) rotateX(75deg) translateZ(165px);
+}
+.ground-ring-2 {
+  width: min(62vw, 580px);
+  height: min(62vw, 580px);
+  transform: translate(-50%, -50%) rotateX(75deg) translateZ(155px);
+}
+.ground-ring-3 {
+  width: min(42vw, 380px);
+  height: min(42vw, 380px);
+  transform: translate(-50%, -50%) rotateX(75deg) translateZ(40px);
+}
 
 .core-project {
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 40%;
   z-index: 3;
   transform: translate(-50%, -50%);
   display: grid;
@@ -1051,7 +1080,7 @@
 
 .core-project-copy {
   width: 400px;
-  height: 650px;
+  height: 550px;
   padding: 1.1rem;
   border-radius: 1rem;
   border: 2px solid var(--c-accent);
@@ -1385,6 +1414,24 @@
   }
   100% {
     transform: scale(1.06);
+  }
+}
+
+@keyframes ringFloat {
+  0%, 100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -6px;
+  }
+}
+
+@keyframes ringShimmer {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 
